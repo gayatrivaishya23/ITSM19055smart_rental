@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card p-4 shadow">
+<h3>Edit Room</h3>
+
+<form method="POST">
+    <input type="text" name="title" value="{{ room.title }}" class="form-control mb-3">
+    <input type="text" name="location" value="{{ room.location }}" class="form-control mb-3">
+    <input type="number" name="price" value="{{ room.price }}" class="form-control mb-3">
+    <button class="btn btn-warning w-100">Update</button>
+</form>
+</div>
+{% endblock %}

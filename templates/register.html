@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="card shadow p-4 mx-auto" style="max-width:500px;">
+<h3 class="mb-3 text-center">Create Account</h3>
+
+<form method="POST">
+    <div class="mb-3">
+        <label>Username</label>
+        <input type="text" name="username" class="form-control" required>
+    </div>
+
+    <div class="mb-3">
+        <label>Password</label>
+        <input type="password" name="password" class="form-control" required>
+    </div>
+
+    <div class="mb-3">
+        <label>Role</label>
+        <select name="role" class="form-select">
+            <option value="tenant">Tenant</option>
+            <option value="owner">Owner</option>
+        </select>
+    </div>
+
+    <button class="btn btn-primary w-100">Register</button>
+</form>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+/* Match base.html background */
+body {
+    background-color: #ffffff;
+}
+
+.glass-card {
+    backdrop-filter: blur(15px);
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 20px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+    padding: 40px;
+    width: 400px;
+    color: #000; /* Dark text looks better on light background */
+}
+
+.form-control {
+    border-radius: 10px;
+}
+
+.btn-custom {
+    background-color: #ffffff;
+    color: #764ba2;
+    font-weight: bold;
+    border-radius: 10px;
+}
+
+.btn-custom:hover {
+    background-color: #f1f1f1;
+}
+</style>
+
+<div class="d-flex justify-content-center align-items-center" style="min-height:90vh;">
+
+    <div class="glass-card">
+
+        <h3 class="text-center mb-4">Welcome Back 👋</h3>
+
+        {% if error %}
+        <div class="alert alert-danger text-center">
+            {{ error }}
+        </div>
+        {% endif %}
+
+        <form method="POST">
+
+            <div class="mb-3">
+                <label>Username</label>
+                <input type="text" name="username" class="form-control" placeholder="Enter username" required>
+            </div>
+
+            <div class="mb-3 position-relative">
+                <label>Password</label>
+                <input type="password" name="password" id="password" class="form-control" placeholder="Enter password" required>
+                <span onclick="togglePassword()" 
+                      style="position:absolute; right:15px; top:38px; cursor:pointer;">
+                    👁
+                </span>
+            </div>
+
+            <div class="d-grid mt-3">
+                <button type="submit" class="btn btn-custom btn-lg">
+                    Login
+                </button>
+            </div>
+
+        </form>
+
+        <div class="text-center mt-4">
+            <small>
+                Don’t have an account?
+                <a href="{{ url_for('register') }}" style="color:#764ba2; font-weight:bold;">
+                    Register
+                </a>
+            </small>
+        </div>
+
+    </div>
+</div>
+
+<script>
+function togglePassword() {
+    var pass = document.getElementById("password");
+    if (pass.type === "password") {
+        pass.type = "text";
+    } else {
+        pass.type = "password";
+    }
+}
+</script>
+
+{% endblock %}

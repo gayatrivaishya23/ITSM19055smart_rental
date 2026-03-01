@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card p-4 shadow">
+<h3>Payment for {{ room.title }}</h3>
+
+<form method="POST">
+    <select class="form-control mb-3">
+        <option>UPI</option>
+        <option>Card</option>
+        <option>Net Banking</option>
+    </select>
+
+    <button class="btn btn-success w-100">Pay Now</button>
+</form>
+</div>
+{% endblock %}

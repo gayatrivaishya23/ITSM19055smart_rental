@@ -1,0 +1,167 @@
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+.hero {
+    background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
+                url("https://images.unsplash.com/photo-1560185127-6ed189bf02f4");
+    background-size: cover;
+    background-position: center;
+    color: white;
+    padding: 100px 0;
+    text-align: center;
+    border-radius: 15px;
+    margin-bottom: 50px;
+}
+
+.room-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-radius: 15px;
+}
+
+.room-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+.price {
+    font-size: 18px;
+    font-weight: bold;
+    color: #28a745;
+}
+
+#suggestions {
+    position: absolute;
+    width: 100%;
+    z-index: 1000;
+}
+</style>
+
+<!-- HERO -->
+<div class="hero">
+    <h1 class="display-4 fw-bold">Find Your Perfect Stay 🏠</h1>
+    <p class="lead">Affordable PG & Rental Rooms</p>
+
+    <div class="row justify-content-center mt-4 position-relative">
+        <div class="col-md-6 position-relative">
+            <input type="text"
+                   id="searchInput"
+                   class="form-control form-control-lg"
+                   placeholder="Search by location...">
+
+            <div id="suggestions" class="list-group"></div>
+        </div>
+    </div>
+</div>
+
+<!-- Add Room Button for Owner -->
+{% if current_user.is_authenticated and current_user.role == "owner" %}
+<div class="text-center mb-4">
+    <a href="{{ url_for('add_room') }}" class="btn btn-lg btn-primary">
+        ➕ Add New Room
+    </a>
+</div>
+{% endif %}
+
+<h2 class="mb-4 text-center fw-bold">Available Rooms</h2>
+
+<div class="row" id="roomContainer">
+{% for room in rooms %}
+<div class="col-md-4">
+    <div class="card room-card shadow mb-4">
+        <div class="card-body">
+            <h5 class="fw-bold">{{ room.title }}</h5>
+            <p>📍 {{ room.location }}</p>
+            <p class="price">₹ {{ room.price }}</p>
+
+            {% if room.is_booked %}
+                <span class="badge bg-danger">Booked</span>
+            {% else %}
+                <span class="badge bg-success">Available</span>
+            {% endif %}
+
+            {% if current_user.is_authenticated and current_user.role == "tenant" and not room.is_booked %}
+                <a href="/book/{{ room.id }}" class="btn btn-success w-100 mt-2">Book Now</a>
+            {% elif not current_user.is_authenticated %}
+                <a href="/login" class="btn btn-outline-primary w-100 mt-2">Login to Book</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endfor %}
+</div>
+
+<div id="noResult" class="text-center mt-5" style="display:none;">
+    <h5>No rooms found.</h5>
+</div>
+
+<script>
+const searchInput = document.getElementById("searchInput");
+const suggestions = document.getElementById("suggestions");
+const roomContainer = document.getElementById("roomContainer");
+const noResult = document.getElementById("noResult");
+
+searchInput.addEventListener("keyup", function () {
+    let query = this.value;
+
+    if (query.length > 0) {
+        fetch(`/search_rooms?q=${query}`)
+            .then(response => response.json())
+            .then(data => {
+
+                suggestions.innerHTML = "";
+                roomContainer.innerHTML = "";
+
+                if (data.length === 0) {
+                    noResult.style.display = "block";
+                    suggestions.innerHTML =
+                        '<div class="list-group-item">No rooms found</div>';
+                } else {
+                    noResult.style.display = "none";
+
+                    data.forEach(room => {
+
+                        // Suggestions Dropdown
+                        suggestions.innerHTML += `
+                            <div class="list-group-item">
+                                <strong>${room.title}</strong><br>
+                                📍 ${room.location} | ₹${room.price}
+                            </div>
+                        `;
+
+                        // Room Cards Dynamic Render
+                        roomContainer.innerHTML += `
+                        <div class="col-md-4">
+                            <div class="card room-card shadow mb-4">
+                                <div class="card-body">
+                                    <h5 class="fw-bold">${room.title}</h5>
+                                    <p>📍 ${room.location}</p>
+                                    <p class="price">₹ ${room.price}</p>
+                                    <span class="badge bg-success">Available</span>
+                                    <a href="/book/${room.id}"
+                                       class="btn btn-success w-100 mt-2">
+                                       Book Now
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        `;
+                    });
+                }
+            });
+    } else {
+        suggestions.innerHTML = "";
+        noResult.style.display = "none";
+        location.reload();   // reset page
+    }
+});
+
+document.addEventListener("click", function(e){
+    if (!searchInput.contains(e.target) &&
+        !suggestions.contains(e.target)) {
+        suggestions.innerHTML = "";
+    }
+});
+</script>
+
+{% endblock %}

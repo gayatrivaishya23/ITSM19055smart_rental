@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container mt-5">
+    <h2 class="mb-4">My Bookings</h2>
+
+    <div class="row">
+        {% for booking in bookings %}
+        <div class="col-md-4">
+            <div class="card shadow mb-4">
+                <div class="card-body">
+                    <p>Room ID: {{ booking.room_id }}</p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    {% if not bookings %}
+    <p>No bookings yet.</p>
+    {% endif %}
+</div>
+
+{% endblock %}

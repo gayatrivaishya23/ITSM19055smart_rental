@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container my-5">
+    <div class="card shadow p-4 mx-auto" style="max-width:500px;">
+        <h3>Add New Room</h3>
+        <form method="POST" enctype="multipart/form-data">
+            <div class="mb-3">
+                <label>Title</label>
+                <input type="text" name="title" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label>Location</label>
+                <input type="text" name="location" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label>Price</label>
+                <input type="number" name="price" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label>Price Type</label>
+                <select name="price_type" class="form-control">
+                    <option value="per_day">Per Day</option>
+                    <option value="per_month">Per Month</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label>Image</label>
+                <input type="file" name="image" class="form-control">
+            </div>
+            <button class="btn btn-success w-100">Add Room</button>
+        </form>
+    </div>
+</div>
+
+{% endblock %}
