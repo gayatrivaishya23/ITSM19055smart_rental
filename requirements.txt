@@ -1,5 +1,5 @@
-Flask==2.3.3
-Flask-Login==0.6.3
-Werkzeug==2.3.3
-SQLAlchemy==2.0.25
-gunicorn==21.2.0
+Flask>=2.3,<3
+Flask-Login>=0.6,<1
+Werkzeug>=2.3,<3
+SQLAlchemy>=2.0,<3
+gunicorn>=20
