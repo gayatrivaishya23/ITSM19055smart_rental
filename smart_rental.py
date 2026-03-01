@@ -189,11 +189,10 @@ def logout():
 if __name__ == "__main__":
     with app.app_context():
         db.create_all()
-
-        # Permanent superowner
+        # superowner
         if not User.query.filter_by(username="superowner").first():
             super_owner = User(username="superowner", password=generate_password_hash("superpassword"), role="superowner")
             db.session.add(super_owner)
             db.session.commit()
 
-    app.run(debug=True)
+    # app.run(debug=True)  # ❌ Commented for Render
