@@ -24,8 +24,7 @@ def load_user(user_id):
 # ---------------- HOME ----------------
 @app.route("/")
 def home():
-    page = request.args.get('page', 1, type=int)
-    rooms = Room.query.paginate(page=page, per_page=5)
+    rooms = Room.query.filter_by(is_booked=False).all()
     return render_template("rooms.html", rooms=rooms)
 
 # ---------------- SEARCH ----------------
@@ -116,7 +115,8 @@ def add_room():
             price=price,
             price_type=price_type,
             image=filename,
-            owner_id=current_user.id
+            owner_id=current_user.id,
+	    is_booked=False 
         )
         db.session.add(room)
         db.session.commit()
@@ -189,10 +189,13 @@ def logout():
 if __name__ == "__main__":
     with app.app_context():
         db.create_all()
-        # superowner
         if not User.query.filter_by(username="superowner").first():
-            super_owner = User(username="superowner", password=generate_password_hash("superpassword"), role="superowner")
+            super_owner = User(
+                username="superowner",
+                password=generate_password_hash("superpassword"),
+                role="superowner"
+            )
             db.session.add(super_owner)
             db.session.commit()
 
-    # app.run(debug=True)  # ❌ Commented for Render
+    # app.run(debug=True) 
